@@ -154,7 +154,8 @@ impl Build for FileLoggerBuilder {
             }
             #[cfg(feature = "json")]
             Format::Json => {
-                let drain = slog_json::Json::default(self.appender.clone());
+                let appender = slog_json::Json::default(self.appender.clone());
+                let drain = std::sync::Mutex::new(appender);
                 self.common.build_with_drain(drain)
             }
         };
